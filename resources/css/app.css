@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Pagination Styles */
+.pagination {
+    @apply flex items-center justify-center space-x-2;
+}
+
+.pagination a,
+.pagination span {
+    @apply px-4 py-2 rounded-lg transition;
+}
+
+.pagination a {
+    @apply bg-gray-800 text-white hover:bg-purple-600 border border-gray-700;
+}
+
+.pagination span {
+    @apply bg-purple-600 text-white border border-purple-600;
+}
+
+.pagination .disabled {
+    @apply bg-gray-800 text-gray-500 cursor-not-allowed border-gray-700;
+}
+
+/* Neon Text Effect */
+.neon-text {
+    text-shadow: 
+        0 0 10px rgba(167, 139, 250, 0.5),
+        0 0 20px rgba(167, 139, 250, 0.5),
+        0 0 30px rgba(167, 139, 250, 0.3),
+        0 0 40px rgba(167, 139, 250, 0.2);
+}
+
+/* Fade in animation for messages */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+}

@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'checkout' => 'Checkout',
+    'checkout_title' => 'Complete Your Order',
+    'order_information' => 'Order Information',
+    'shipping_information' => 'Shipping Information',
+    'full_name' => 'Full Name',
+    'email' => 'Email',
+    'phone_number' => 'Phone Number',
+    'city' => 'City',
+    'address' => 'Address',
+    'payment_method' => 'Payment Method',
+    'payment_method_cod' => 'Cash on Delivery',
+    'place_order' => 'Place Order',
+    'order_summary' => 'Order Summary',
+    'cart_empty' => 'Your cart is empty',
+    'order_created' => 'Order created successfully',
+    'order_confirmation' => 'Order Confirmation',
+    'thank_you' => 'Thank you for your order!',
+    'order_number' => 'Order Number',
+    'order_date' => 'Order Date',
+    'order_status' => 'Order Status',
+    'shipping_address' => 'Shipping Address',
+    'subtotal' => 'Subtotal',
+    'delivery_fee' => 'Delivery Fee',
+    'total' => 'Total',
+    'select_city' => 'Select City',
+    'other_city' => 'Other City',
+];
+

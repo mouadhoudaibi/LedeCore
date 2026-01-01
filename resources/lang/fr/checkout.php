@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'checkout' => 'Commande',
+    'checkout_title' => 'Finaliser la commande',
+    'order_information' => 'Informations de commande',
+    'shipping_information' => 'Informations de livraison',
+    'full_name' => 'Nom complet',
+    'email' => 'Email',
+    'phone_number' => 'Numéro de téléphone',
+    'city' => 'Ville',
+    'address' => 'Adresse',
+    'payment_method' => 'Méthode de paiement',
+    'payment_method_cod' => 'Paiement à la livraison',
+    'place_order' => 'Passer la commande',
+    'order_summary' => 'Résumé de la commande',
+    'cart_empty' => 'Votre panier est vide',
+    'order_created' => 'Commande créée avec succès',
+    'order_confirmation' => 'Confirmation de commande',
+    'thank_you' => 'Merci pour votre commande!',
+    'order_number' => 'Numéro de commande',
+    'order_date' => 'Date de commande',
+    'order_status' => 'Statut de la commande',
+    'shipping_address' => 'Adresse de livraison',
+    'subtotal' => 'Sous-total',
+    'delivery_fee' => 'Frais de livraison',
+    'total' => 'Total',
+    'select_city' => 'Sélectionner la ville',
+    'other_city' => 'Autre ville',
+];
+
