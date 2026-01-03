@@ -25,6 +25,7 @@ class Order extends Model
         'customer_phone',
         'shipping_address',
         'notes',
+        'delivered_at',
     ];
 
     /**
@@ -38,6 +39,7 @@ class Order extends Model
             'total_amount' => 'decimal:2',
             'delivery_fee' => 'decimal:2',
             'status' => 'string',
+            'delivered_at' => 'datetime',
         ];
     }
 
@@ -144,21 +146,35 @@ class Order extends Model
     }
 
     /**
-     * Check if order is visible to clients (not hidden refused orders).
-     * Refused orders are hidden from clients after 24 hours from updated_at.
+     * Check if order is visible to clients.
+     * - Refused orders are hidden after 24 hours from updated_at.
+     * - Delivered orders are hidden after 24 hours from delivered_at.
      */
     public function isVisibleToClient(): bool
     {
-        // If order is not refused, it's always visible
-        if ($this->status !== 'refused') {
+        // Pending and validated orders are always visible
+        if (in_array($this->status, ['pending', 'validated'])) {
             return true;
         }
 
         // Refused orders are visible for 24 hours after being refused (based on updated_at)
-        $refusedAt = $this->updated_at;
-        $hoursSinceRefused = now()->diffInHours($refusedAt);
+        if ($this->status === 'refused') {
+            $refusedAt = $this->updated_at;
+            $hoursSinceRefused = now()->diffInHours($refusedAt);
+            return $hoursSinceRefused < 24;
+        }
 
-        // Visible if less than 24 hours have passed since refusal
-        return $hoursSinceRefused < 24;
+        // Delivered orders are visible for 24 hours after delivery (based on delivered_at)
+        if ($this->status === 'delivered' && $this->delivered_at) {
+            $hoursSinceDelivered = now()->diffInHours($this->delivered_at);
+            return $hoursSinceDelivered < 24;
+        }
+
+        // If delivered but no delivered_at timestamp, show it (shouldn't happen, but safety check)
+        if ($this->status === 'delivered') {
+            return true;
+        }
+
+        return false;
     }
 }

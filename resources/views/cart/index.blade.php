@@ -38,11 +38,11 @@
                                 <td class="px-6 py-4">
                                     @if($item['product']->hasPromoPrice())
                                         <div class="flex flex-col">
-                                            <span class="text-gray-500 line-through text-sm">
-                                                {{ number_format($item['product']->price, 2) }} MAD
-                                            </span>
                                             <span class="text-purple-400 font-semibold">
                                                 {{ number_format($item['product']->effective_price, 2) }} MAD
+                                            </span>
+                                            <span class="text-green-400 text-xs font-medium">
+                                                -{{ $item['product']->discount_percentage }}%
                                             </span>
                                         </div>
                                     @else
@@ -103,7 +103,14 @@
                             <a href="{{ route('products.show', $item['product']->slug) }}" class="text-white hover:text-purple-400 transition font-medium block mb-2">
                                 {{ $item['product']->name }}
                             </a>
-                            <p class="text-purple-400 font-semibold mb-1">{{ number_format($item['product']->price, 2) }} MAD</p>
+                            @if($item['product']->hasPromoPrice())
+                                <div class="mb-1">
+                                    <p class="text-purple-400 font-semibold">{{ number_format($item['product']->effective_price, 2) }} MAD</p>
+                                    <p class="text-green-400 text-xs font-medium">-{{ $item['product']->discount_percentage }}%</p>
+                                </div>
+                            @else
+                                <p class="text-purple-400 font-semibold mb-1">{{ number_format($item['product']->price, 2) }} MAD</p>
+                            @endif
                             <p class="text-gray-400 text-sm">{{ __('common.total') }}: <span class="text-white font-semibold">{{ number_format($item['total'], 2) }} MAD</span></p>
                         </div>
                     </div>

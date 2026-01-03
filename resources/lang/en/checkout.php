@@ -27,5 +27,24 @@ return [
     'total' => 'Total',
     'select_city' => 'Select City',
     'other_city' => 'Other City',
+    'receipt' => 'Receipt',
+    'download_receipt' => 'Download Receipt',
+    'view_receipt' => 'View Receipt',
+    'receipt_footer' => 'Thank you for your purchase!',
+    
+    // Validation Messages
+    'validation' => [
+        'name_required' => 'Full name is required.',
+        'name_max' => 'Full name cannot exceed 255 characters.',
+        'email_required' => 'Email address is required.',
+        'email_invalid' => 'Please enter a valid email address.',
+        'email_max' => 'Email address cannot exceed 255 characters.',
+        'phone_required' => 'Phone number is required.',
+        'phone_format' => 'Phone number must start with 06 or 07 and be exactly 10 digits (e.g., 0612345678).',
+        'city_required' => 'City selection is required.',
+        'city_max' => 'City name cannot exceed 255 characters.',
+        'address_required' => 'Address is required.',
+        'address_min' => 'Address must be at least 5 characters long.',
+    ],
 ];
 

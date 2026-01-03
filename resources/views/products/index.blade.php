@@ -8,13 +8,42 @@
     <p class="text-gray-400 text-lg">{{ __('common.categories') }}</p>
 </div>
 
+<!-- Search Form -->
+<div class="mb-6">
+    <form action="{{ route('products.index') }}" method="GET" class="max-w-md">
+        <div class="flex gap-2">
+            <input type="text" 
+                   name="search" 
+                   value="{{ request()->search }}" 
+                   placeholder="{{ __('common.search_products') }}"
+                   class="flex-1 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition">
+            @if(request()->has('category'))
+                <input type="hidden" name="category" value="{{ request()->category }}">
+            @endif
+            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg transition font-medium flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <span>{{ __('common.search') }}</span>
+            </button>
+            @if(request()->has('search') && request()->search)
+                <a href="{{ route('products.index', request()->except('search')) }}" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2.5 rounded-lg transition font-medium flex items-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </a>
+            @endif
+        </div>
+    </form>
+</div>
+
 <!-- Categories Filter -->
 <div class="mb-10 flex flex-wrap gap-3">
-    <a href="{{ route('products.index') }}" class="px-4 py-2 rounded-lg {{ !request()->has('category') ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700' }} transition">
+    <a href="{{ route('products.index', request()->except('category')) }}" class="px-4 py-2 rounded-lg {{ !request()->has('category') ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700' }} transition">
         {{ __('common.all_categories') }}
     </a>
     @foreach($categories as $category)
-        <a href="{{ route('products.index', ['category' => $category->id]) }}" class="px-4 py-2 rounded-lg {{ request()->category == $category->id ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700' }} transition">
+        <a href="{{ route('products.index', array_merge(request()->except('page'), ['category' => $category->id])) }}" class="px-4 py-2 rounded-lg {{ request()->category == $category->id ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700' }} transition">
             {{ $category->name }}
         </a>
     @endforeach
@@ -22,7 +51,14 @@
 
 <!-- Products Grid -->
 @if($products->count() > 0)
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    @if(request()->has('search') && request()->search)
+        <div class="mb-6">
+            <p class="text-gray-400">
+                {{ __('common.search_results', ['count' => $products->total(), 'query' => request()->search]) }}
+            </p>
+        </div>
+    @endif
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         @foreach($products as $product)
             <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-purple-600 transition-all duration-200 flex flex-col">
                 <!-- Product Image -->

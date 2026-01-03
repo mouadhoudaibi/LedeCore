@@ -46,15 +46,21 @@
             <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 md:p-8">
                 <h2 class="text-2xl font-bold text-white mb-8">{{ __('checkout.shipping_information') }}</h2>
                 
-                <form action="{{ route('checkout.store') }}" method="POST" class="space-y-6">
+                <form action="{{ route('checkout.store') }}" method="POST" class="space-y-6" id="checkoutForm" novalidate>
                     @csrf
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-gray-300 mb-2 font-medium">{{ __('checkout.full_name') }} *</label>
-                            <input type="text" name="customer_name" value="{{ old('customer_name') }}" required
+                            <input type="text" name="customer_name" id="customer_name" value="{{ old('customer_name') }}" required
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition placeholder-gray-500"
                                 placeholder="{{ __('checkout.full_name') }}">
+                            <p class="text-red-400 text-sm mt-1 flex items-center gap-1 hidden" id="name-error">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span id="name-error-text"></span>
+                            </p>
                             @error('customer_name')
                                 <p class="text-red-400 text-sm mt-1 flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -67,9 +73,15 @@
                         
                         <div>
                             <label class="block text-gray-300 mb-2 font-medium">{{ __('checkout.email') }} *</label>
-                            <input type="email" name="customer_email" value="{{ old('customer_email') }}" required
+                            <input type="email" name="customer_email" id="customer_email" value="{{ old('customer_email') }}" required
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition placeholder-gray-500"
                                 placeholder="email@example.com">
+                            <p class="text-red-400 text-sm mt-1 flex items-center gap-1 hidden" id="email-error">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span id="email-error-text"></span>
+                            </p>
                             @error('customer_email')
                                 <p class="text-red-400 text-sm mt-1 flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -81,20 +93,27 @@
                         </div>
                     </div>
                     
-                    <div>
-                        <label class="block text-gray-300 mb-2 font-medium">{{ __('checkout.phone_number') }} *</label>
-                        <input type="text" name="customer_phone" value="{{ old('customer_phone') }}" required
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition placeholder-gray-500"
-                            placeholder="+212 6XX XXX XXX">
-                        @error('customer_phone')
-                            <p class="text-red-400 text-sm mt-1 flex items-center gap-1">
+                        <div>
+                            <label class="block text-gray-300 mb-2 font-medium">{{ __('checkout.phone_number') }} *</label>
+                            <input type="text" name="customer_phone" id="customer_phone" value="{{ old('customer_phone') }}" required
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition placeholder-gray-500"
+                                placeholder="0612345678" pattern="^(06|07)[0-9]{8}$" maxlength="10">
+                            <p class="text-gray-500 text-xs mt-1">{{ __('checkout.validation.phone_format') }}</p>
+                            <p class="text-red-400 text-sm mt-1 flex items-center gap-1 hidden" id="phone-error">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                 </svg>
-                                {{ $message }}
+                                <span id="phone-error-text"></span>
                             </p>
-                        @enderror
-                    </div>
+                            @error('customer_phone')
+                                <p class="text-red-400 text-sm mt-1 flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -106,6 +125,12 @@
                                 <option value="Casablanca" {{ old('city') === 'Casablanca' ? 'selected' : '' }}>Casablanca</option>
                                 <option value="Other" {{ old('city') === 'Other' ? 'selected' : '' }}>{{ __('checkout.other_city') }}</option>
                             </select>
+                            <p class="text-red-400 text-sm mt-1 flex items-center gap-1 hidden" id="city-error">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span id="city-error-text"></span>
+                            </p>
                             @error('city')
                                 <p class="text-red-400 text-sm mt-1 flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -118,9 +143,15 @@
                         
                         <div>
                             <label class="block text-gray-300 mb-2 font-medium">{{ __('checkout.address') }} *</label>
-                            <textarea name="address" required rows="4"
+                            <textarea name="address" id="address" required rows="4"
                                 class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition placeholder-gray-500 resize-none"
                                 placeholder="{{ __('checkout.address') }}">{{ old('address') }}</textarea>
+                            <p class="text-red-400 text-sm mt-1 flex items-center gap-1 hidden" id="address-error">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span id="address-error-text"></span>
+                            </p>
                             @error('address')
                                 <p class="text-red-400 text-sm mt-1 flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -191,5 +222,184 @@
     @if(old('city'))
         updateDeliveryFee();
     @endif
+
+    // Form validation
+    const form = document.getElementById('checkoutForm');
+    const nameInput = document.getElementById('customer_name');
+    const emailInput = document.getElementById('customer_email');
+    const phoneInput = document.getElementById('customer_phone');
+    const citySelect = document.getElementById('citySelect');
+    const addressInput = document.getElementById('address');
+
+    // Validation functions
+    function validateName() {
+        const name = nameInput.value.trim();
+        const errorEl = document.getElementById('name-error');
+        const errorText = document.getElementById('name-error-text');
+        
+        if (!name) {
+            errorText.textContent = '{{ __('checkout.validation.name_required') }}';
+            errorEl.classList.remove('hidden');
+            nameInput.classList.add('border-red-500');
+            return false;
+        }
+        if (name.length > 255) {
+            errorText.textContent = '{{ __('checkout.validation.name_max') }}';
+            errorEl.classList.remove('hidden');
+            nameInput.classList.add('border-red-500');
+            return false;
+        }
+        errorEl.classList.add('hidden');
+        nameInput.classList.remove('border-red-500');
+        return true;
+    }
+
+    function validateEmail() {
+        const email = emailInput.value.trim();
+        const errorEl = document.getElementById('email-error');
+        const errorText = document.getElementById('email-error-text');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (!email) {
+            errorText.textContent = '{{ __('checkout.validation.email_required') }}';
+            errorEl.classList.remove('hidden');
+            emailInput.classList.add('border-red-500');
+            return false;
+        }
+        if (!emailRegex.test(email)) {
+            errorText.textContent = '{{ __('checkout.validation.email_invalid') }}';
+            errorEl.classList.remove('hidden');
+            emailInput.classList.add('border-red-500');
+            return false;
+        }
+        if (email.length > 255) {
+            errorText.textContent = '{{ __('checkout.validation.email_max') }}';
+            errorEl.classList.remove('hidden');
+            emailInput.classList.add('border-red-500');
+            return false;
+        }
+        errorEl.classList.add('hidden');
+        emailInput.classList.remove('border-red-500');
+        return true;
+    }
+
+    function validatePhone() {
+        const phone = phoneInput.value.trim().replace(/\s+/g, '');
+        const errorEl = document.getElementById('phone-error');
+        const errorText = document.getElementById('phone-error-text');
+        const phoneRegex = /^(06|07)[0-9]{8}$/;
+        
+        if (!phone) {
+            errorText.textContent = '{{ __('checkout.validation.phone_required') }}';
+            errorEl.classList.remove('hidden');
+            phoneInput.classList.add('border-red-500');
+            return false;
+        }
+        if (!phoneRegex.test(phone)) {
+            errorText.textContent = '{{ __('checkout.validation.phone_format') }}';
+            errorEl.classList.remove('hidden');
+            phoneInput.classList.add('border-red-500');
+            return false;
+        }
+        errorEl.classList.add('hidden');
+        phoneInput.classList.remove('border-red-500');
+        return true;
+    }
+
+    function validateCity() {
+        const city = citySelect.value;
+        const errorEl = document.getElementById('city-error');
+        const errorText = document.getElementById('city-error-text');
+        
+        if (!city) {
+            errorText.textContent = '{{ __('checkout.validation.city_required') }}';
+            errorEl.classList.remove('hidden');
+            citySelect.classList.add('border-red-500');
+            return false;
+        }
+        errorEl.classList.add('hidden');
+        citySelect.classList.remove('border-red-500');
+        return true;
+    }
+
+    function validateAddress() {
+        const address = addressInput.value.trim();
+        const errorEl = document.getElementById('address-error');
+        const errorText = document.getElementById('address-error-text');
+        
+        if (!address) {
+            errorText.textContent = '{{ __('checkout.validation.address_required') }}';
+            errorEl.classList.remove('hidden');
+            addressInput.classList.add('border-red-500');
+            return false;
+        }
+        if (address.length < 5) {
+            errorText.textContent = '{{ __('checkout.validation.address_min') }}';
+            errorEl.classList.remove('hidden');
+            addressInput.classList.add('border-red-500');
+            return false;
+        }
+        errorEl.classList.add('hidden');
+        addressInput.classList.remove('border-red-500');
+        return true;
+    }
+
+    // Real-time validation on input
+    nameInput.addEventListener('blur', validateName);
+    nameInput.addEventListener('input', function() {
+        if (nameInput.classList.contains('border-red-500')) {
+            validateName();
+        }
+    });
+
+    emailInput.addEventListener('blur', validateEmail);
+    emailInput.addEventListener('input', function() {
+        if (emailInput.classList.contains('border-red-500')) {
+            validateEmail();
+        }
+    });
+
+    phoneInput.addEventListener('blur', validatePhone);
+    phoneInput.addEventListener('input', function() {
+        // Remove non-numeric characters except for display
+        phoneInput.value = phoneInput.value.replace(/[^0-9]/g, '');
+        if (phoneInput.classList.contains('border-red-500')) {
+            validatePhone();
+        }
+    });
+
+    citySelect.addEventListener('change', function() {
+        validateCity();
+        updateDeliveryFee();
+    });
+
+    addressInput.addEventListener('blur', validateAddress);
+    addressInput.addEventListener('input', function() {
+        if (addressInput.classList.contains('border-red-500')) {
+            validateAddress();
+        }
+    });
+
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        const isNameValid = validateName();
+        const isEmailValid = validateEmail();
+        const isPhoneValid = validatePhone();
+        const isCityValid = validateCity();
+        const isAddressValid = validateAddress();
+
+        if (!isNameValid || !isEmailValid || !isPhoneValid || !isCityValid || !isAddressValid) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Scroll to first error
+            const firstError = document.querySelector('.border-red-500');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
+            }
+            return false;
+        }
+    });
 </script>
 @endsection

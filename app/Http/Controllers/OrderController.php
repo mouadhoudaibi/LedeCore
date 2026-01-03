@@ -50,9 +50,15 @@ class OrderController extends Controller
      */
     public function updateStatus(Order $order, string $status): RedirectResponse
     {
-        if (!in_array($status, ['validated', 'refused'])) {
+        if (!in_array($status, ['validated', 'refused', 'delivered'])) {
             return redirect()->route('admin.orders.index')
                 ->with('error', __('admin.invalid_status'));
+        }
+
+        // Only validated orders can be marked as delivered
+        if ($status === 'delivered' && $order->status !== 'validated') {
+            return redirect()->route('admin.orders.show', $order)
+                ->with('error', __('admin.can_only_deliver_validated'));
         }
 
         return DB::transaction(function () use ($order, $status) {
@@ -67,13 +73,24 @@ class OrderController extends Controller
                 }
             }
 
-            $order->update(['status' => $status]);
+            // Prepare update data
+            $updateData = ['status' => $status];
+            
+            // If marking as delivered, set delivered_at timestamp
+            if ($status === 'delivered') {
+                $updateData['delivered_at'] = now();
+            }
 
-            $message = $status === 'validated' 
-                ? __('admin.order_validated') 
-                : __('admin.order_refused');
+            $order->update($updateData);
 
-            return redirect()->route('admin.orders.index')
+            $message = match($status) {
+                'validated' => __('admin.order_validated'),
+                'refused' => __('admin.order_refused'),
+                'delivered' => __('admin.order_delivered'),
+                default => __('admin.status_updated'),
+            };
+
+            return redirect()->route('admin.orders.show', $order)
                 ->with('success', $message);
         });
     }

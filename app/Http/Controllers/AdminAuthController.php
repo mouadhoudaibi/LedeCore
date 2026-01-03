@@ -15,7 +15,7 @@ class AdminAuthController extends Controller
     public function showLoginForm(): View|RedirectResponse
     {
         // If already authenticated as admin, redirect to dashboard
-        if (Auth::check() && Auth::user()->isAdmin()) {
+        if (Auth::guard('admin')->check() && Auth::guard('admin')->user()->isAdmin()) {
             return redirect()->route('admin.dashboard');
         }
 
@@ -32,14 +32,15 @@ class AdminAuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        // Attempt login using admin guard
+        if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
 
-            $user = Auth::user();
+            $user = Auth::guard('admin')->user();
 
             // Check if user is admin
-            if (!$user->isAdmin()) {
-                Auth::logout();
+            if (!$user || !$user->isAdmin()) {
+                Auth::guard('admin')->logout();
                 return back()->withErrors([
                     'email' => __('admin.not_admin'),
                 ])->onlyInput('email');
@@ -62,7 +63,7 @@ class AdminAuthController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

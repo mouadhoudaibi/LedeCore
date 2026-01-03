@@ -16,8 +16,8 @@ class AdminAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if user is authenticated
-        if (!Auth::check()) {
+        // Check if user is authenticated using admin guard
+        if (!Auth::guard('admin')->check()) {
             // Store intended URL for redirect after login
             if (!$request->expectsJson()) {
                 return redirect()->route('admin.login')->with('intended', $request->url());
@@ -26,8 +26,9 @@ class AdminAuth
         }
 
         // Check if user is admin
-        if (!Auth::user()->isAdmin()) {
-            Auth::logout();
+        $user = Auth::guard('admin')->user();
+        if (!$user || !$user->isAdmin()) {
+            Auth::guard('admin')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             return redirect()->route('admin.login')->with('error', __('admin.not_admin'));

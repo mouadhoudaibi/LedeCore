@@ -68,6 +68,8 @@
                                         <span class="inline-block bg-yellow-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('common.pending') }}</span>
                                     @elseif($order->status === 'validated')
                                         <span class="inline-block bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('common.validated') }}</span>
+                                    @elseif($order->status === 'delivered')
+                                        <span class="inline-block bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('common.delivered') }}</span>
                                     @else
                                         <span class="inline-block bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('common.refused') }}</span>
                                     @endif

@@ -13,6 +13,9 @@ class CartController extends Controller
 {
     /**
      * Display the cart page.
+     * 
+     * Cart is stored in Laravel session, which is automatically isolated per browser/device.
+     * Each browser session gets a unique session ID cookie, ensuring cart isolation.
      */
     public function index(): View
     {

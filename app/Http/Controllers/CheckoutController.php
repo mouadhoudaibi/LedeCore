@@ -7,7 +7,9 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Setting;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -126,7 +128,8 @@ class CheckoutController extends Controller
                 OrderItem::create($orderItem);
             }
 
-            // Clear cart
+            // Clear cart after successful order creation
+            // Cart is session-based and isolated per browser/device automatically
             Session::forget('cart');
 
             // Load relationships for response
@@ -145,5 +148,31 @@ class CheckoutController extends Controller
         $order = Order::with('orderItems.product')->where('order_number', $orderNumber)->firstOrFail();
 
         return view('checkout.success', compact('order'));
+    }
+
+    /**
+     * Generate and download PDF receipt for an order.
+     */
+    public function downloadReceipt(string $orderNumber): Response
+    {
+        $order = Order::with('orderItems.product')->where('order_number', $orderNumber)->firstOrFail();
+
+        $pdf = Pdf::loadView('receipts.pdf', compact('order'));
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download('receipt-' . $order->order_number . '.pdf');
+    }
+
+    /**
+     * Generate and view PDF receipt for an order.
+     */
+    public function viewReceipt(string $orderNumber): Response
+    {
+        $order = Order::with('orderItems.product')->where('order_number', $orderNumber)->firstOrFail();
+
+        $pdf = Pdf::loadView('receipts.pdf', compact('order'));
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->stream('receipt-' . $order->order_number . '.pdf');
     }
 }

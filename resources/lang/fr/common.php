@@ -13,6 +13,7 @@ return [
     'pending' => 'En attente',
     'validated' => 'Validée',
     'refused' => 'Refusée',
+    'delivered' => 'Livré',
     
     // Common Actions
     'add_to_cart' => 'Ajouter au panier',
@@ -59,6 +60,7 @@ return [
     'order_not_found_message' => 'Aucune commande trouvée avec ces informations. Veuillez vérifier votre numéro de commande ou votre numéro de téléphone.',
     'status_pending_message' => 'Votre commande est en attente de validation.',
     'status_validated_message' => 'Votre commande a été validée et sera traitée prochainement.',
+    'status_delivered_message' => 'Votre commande a été livrée avec succès ! Merci pour votre achat.',
     'status_refused_message' => 'Votre commande a été refusée. Veuillez nous contacter pour plus d\'informations.',
     'order_will_disappear' => 'Cette commande disparaîtra dans',
     'countdown_description' => 'Après 24 heures, cette commande ne sera plus visible.',
@@ -68,6 +70,8 @@ return [
     // General
     'welcome' => 'Bienvenue',
     'search' => 'Rechercher',
+    'search_products' => 'Rechercher des produits...',
+    'search_results' => ':count résultat(s) trouvé(s) pour ":query"',
     'categories' => 'Catégories',
     'all_categories' => 'Toutes les catégories',
     'view_all_products' => 'Voir tous les produits',

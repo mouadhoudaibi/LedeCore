@@ -177,7 +177,13 @@ class ProductController extends Controller
             $query->where('category_id', request()->category);
         }
 
-        $products = $query->latest()->paginate(12);
+        // Search by product name if provided
+        if (request()->has('search') && request()->search) {
+            $search = request()->search;
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $products = $query->latest()->paginate(12)->withQueryString();
         $categories = Category::where('is_active', true)->get();
 
         return view('products.index', compact('products', 'categories'));
@@ -205,8 +211,7 @@ class ProductController extends Controller
         $featuredProducts = Product::with('category')
             ->where('is_active', true)
             ->latest()
-            ->take(6)
-            ->get();
+            ->paginate(12);
 
         return view('home', compact('featuredProducts'));
     }

@@ -5,8 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('admin.login') }} - LedeCore</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <!-- Toast Notifications Container -->
+    <div 
+        class="fixed top-4 right-4 z-50 space-y-3" 
+        x-data="{
+            toasts: [],
+            addToast(type, message) {
+                const id = Date.now() + Math.random();
+                this.toasts.push({ id, type, message });
+                setTimeout(() => {
+                    this.removeToast(id);
+                }, 5000);
+            },
+            removeToast(id) {
+                this.toasts = this.toasts.filter(t => t.id !== id);
+            }
+        }"
+        x-init="
+            @if(session('error'))
+                addToast('error', {{ json_encode(session('error')) }});
+            @endif
+            @if($errors->any())
+                @foreach($errors->all() as $error)
+                    addToast('error', {{ json_encode($error) }});
+                @endforeach
+            @endif
+        "
+    >
+        <template x-for="toast in toasts" :key="toast.id">
+            <div 
+                x-show="toast"
+                x-transition:enter="transition ease-out duration-300 transform"
+                x-transition:enter-start="opacity-0 translate-x-full"
+                x-transition:enter-end="opacity-100 translate-x-0"
+                x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="opacity-100 translate-x-0"
+                x-transition:leave-end="opacity-0 translate-x-full"
+                class="bg-red-600 text-white px-4 py-3 md:px-5 md:py-4 rounded-lg shadow-xl flex items-center space-x-3 min-w-[280px] md:min-w-[300px] max-w-[calc(100vw-2rem)] md:max-w-md"
+            >
+                <div class="flex-shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <p class="flex-1 font-medium text-sm" x-text="toast.message"></p>
+                <button 
+                    @click="removeToast(toast.id)"
+                    class="flex-shrink-0 text-white hover:text-gray-200 transition"
+                    aria-label="Close"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </template>
+    </div>
     <div class="w-full max-w-md px-4">
         <div class="bg-gray-800 rounded-lg border border-purple-600 p-8 shadow-2xl">
             <!-- Logo/Header -->
@@ -14,23 +71,6 @@
                 <h1 class="text-3xl font-bold text-purple-400 mb-2">LedeCore</h1>
                 <p class="text-gray-400">{{ __('admin.admin_login') }}</p>
             </div>
-
-            <!-- Error Messages -->
-            @if(session('error'))
-                <div class="mb-4 bg-red-600 text-white px-4 py-3 rounded-lg">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="mb-4 bg-red-600 text-white px-4 py-3 rounded-lg">
-                    <ul class="list-disc list-inside">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
             <!-- Login Form -->
             <form action="{{ route('admin.login.post') }}" method="POST" class="space-y-6">

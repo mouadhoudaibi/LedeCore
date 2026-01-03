@@ -97,7 +97,7 @@
             <p class="text-gray-400 text-lg">Discover our latest LED lighting solutions</p>
         </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-7xl mx-auto">
             @foreach($featuredProducts as $product)
                 <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-purple-600 transition-all duration-200 flex flex-col group">
                     <!-- Product Image -->
@@ -147,6 +147,13 @@
                 </div>
             @endforeach
         </div>
+        
+        <!-- Pagination -->
+        @if($featuredProducts->hasPages())
+            <div class="mt-8">
+                {{ $featuredProducts->links() }}
+            </div>
+        @endif
         
         <!-- View All Products Button -->
         <div class="text-center mt-12">

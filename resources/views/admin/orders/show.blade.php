@@ -31,6 +31,8 @@
                             <span class="inline-block bg-yellow-600 text-white px-3 py-1 rounded-full text-sm">{{ __('common.pending') }}</span>
                         @elseif($order->status === 'validated')
                             <span class="inline-block bg-green-600 text-white px-3 py-1 rounded-full text-sm">{{ __('common.validated') }}</span>
+                        @elseif($order->status === 'delivered')
+                            <span class="inline-block bg-blue-600 text-white px-3 py-1 rounded-full text-sm">{{ __('common.delivered') }}</span>
                         @else
                             <span class="inline-block bg-red-600 text-white px-3 py-1 rounded-full text-sm">{{ __('common.refused') }}</span>
                         @endif
@@ -160,6 +162,16 @@
                             </button>
                         </form>
                     </div>
+                @elseif($order->status === 'validated')
+                    <form action="{{ route('admin.orders.updateStatus', [$order, 'delivered']) }}" method="POST" onsubmit="return confirm('{{ __('admin.confirm_deliver_order', ['number' => $order->order_number]) }}')">
+                        @csrf
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg transition font-semibold flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>{{ __('admin.mark_as_delivered') }}</span>
+                        </button>
+                    </form>
                 @endif
             </div>
         </div>

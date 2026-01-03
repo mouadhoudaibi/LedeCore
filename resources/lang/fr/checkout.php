@@ -27,5 +27,24 @@ return [
     'total' => 'Total',
     'select_city' => 'Sélectionner la ville',
     'other_city' => 'Autre ville',
+    'receipt' => 'Reçu',
+    'download_receipt' => 'Télécharger le reçu',
+    'view_receipt' => 'Voir le reçu',
+    'receipt_footer' => 'Merci pour votre achat!',
+    
+    // Messages de validation
+    'validation' => [
+        'name_required' => 'Le nom complet est requis.',
+        'name_max' => 'Le nom complet ne peut pas dépasser 255 caractères.',
+        'email_required' => 'L\'adresse e-mail est requise.',
+        'email_invalid' => 'Veuillez entrer une adresse e-mail valide.',
+        'email_max' => 'L\'adresse e-mail ne peut pas dépasser 255 caractères.',
+        'phone_required' => 'Le numéro de téléphone est requis.',
+        'phone_format' => 'Le numéro de téléphone doit commencer par 06 ou 07 et contenir exactement 10 chiffres (ex: 0612345678).',
+        'city_required' => 'La sélection de la ville est requise.',
+        'city_max' => 'Le nom de la ville ne peut pas dépasser 255 caractères.',
+        'address_required' => 'L\'adresse est requise.',
+        'address_min' => 'L\'adresse doit contenir au moins 5 caractères.',
+    ],
 ];
 

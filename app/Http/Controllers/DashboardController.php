@@ -35,6 +35,7 @@ class DashboardController extends Controller
             'pending' => $orders->where('status', 'pending')->count(),
             'validated' => $orders->where('status', 'validated')->count(),
             'refused' => $orders->where('status', 'refused')->count(),
+            'delivered' => $orders->where('status', 'delivered')->count(),
         ];
 
         return response()->json($statistics);

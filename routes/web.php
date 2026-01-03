@@ -32,6 +32,8 @@ Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear')
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/checkout/success/{orderNumber}', [CheckoutController::class, 'success'])->name('checkout.success');
+Route::get('/orders/{orderNumber}/receipt', [CheckoutController::class, 'viewReceipt'])->name('orders.receipt.view');
+Route::get('/orders/{orderNumber}/receipt/download', [CheckoutController::class, 'downloadReceipt'])->name('orders.receipt.download');
 
 // Order Tracking Routes
 Route::get('/track-order', [OrderTrackingController::class, 'show'])->name('orders.track');
